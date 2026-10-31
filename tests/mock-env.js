@@ -137,12 +137,13 @@ function createMockEnv(url = "https://docs.google.com/document/d/123/edit") {
       if (this._listeners && this._listeners[type]) {
         this._listeners[type].forEach(fn => fn(ev));
       }
+      if (ev.bubbles && this.parentElement) this.parentElement.dispatchEvent(ev);
       return true;
     }
     click() {
       this.clicked = true;
       if (this.onclick) this.onclick({ target: this, type: "click" });
-      this.dispatchEvent({ target: this, type: "click" });
+      this.dispatchEvent({ target: this, type: "click", bubbles: true });
     }
   }
 

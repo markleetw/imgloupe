@@ -12,7 +12,7 @@
 #imgloupeToolbar .imgloupe-action:hover { background: #e3f0ed; }
 #imgloupeToolbar .imgloupe-action:disabled { opacity: .5; cursor: wait; }
 #imgloupeToolbar .imgloupe-action:focus-visible { outline: 2px solid #005753; outline-offset: -2px; }
-#imgloupeToolbar.imgloupe-actions--preview-hidden { visibility: hidden; pointer-events: none; }
+#imgloupeToolbar[inert] { visibility: hidden; pointer-events: none; }
 .viewer-toolbar > ul > li.imgloupe-has-svg { background: #202b41; color: white; width: 40px; height: 40px; margin-top: 0; margin-bottom: 0; }
 .viewer-toolbar > ul > li.imgloupe-has-svg::before { display: none; }
 .viewer-toolbar > ul > li.imgloupe-has-svg svg { width: 22px; height: 22px; margin: 9px; fill: none; stroke: currentColor; stroke-width: 1.8; }

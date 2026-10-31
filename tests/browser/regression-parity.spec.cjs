@@ -58,6 +58,9 @@ for (const version of versions) test.describe(version.name, () => {
 
   test('Escape closes preview and restores the selected image actions', async ({ page }) => {
     await workspace(page, version); await preview(page);
+    // Behind the open preview the image actions are hidden and inert.
+    await expect(page.locator('#imgloupe-action-preview')).toBeHidden();
+    expect(await page.locator('#imgloupeToolbar').evaluate(node => node.inert)).toBe(true);
     await page.keyboard.press('Escape');
     await expect(page.locator('.viewer-container')).toBeHidden();
     await expect(page.locator('#imgloupe-action-preview')).toBeVisible();
