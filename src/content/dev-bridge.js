@@ -2,14 +2,29 @@
 // the installed extension from the document page: the page posts
 //   { source: 'imgloupe-dev', type: 'ping' | 'export' | 'parts' | 'lastOcr' | 'reload' | 'action', action? }
 // and receives { source: 'imgloupe-dev-result', type, result | error }.
-// The store build is compiled with __IMGLOUPE_DEV__ = false, which removes this
-// module, and scripts/verify-package.mjs rejects any package containing it.
+// It is loaded only by the development entry (src/content/dev-entry.js);
+// store builds never import it, and scripts/verify-package.mjs rejects any
+// package containing it.
+import { cleanOcrText } from './ocr/text-cleaner.js';
+
 let lastOcr = null;
-export function recordDevOcr(raw, text) {
-  lastOcr = { raw, text };
+
+// Remember the latest recognition result by watching this content script's
+// own "do-ocr" requests to the background service worker.
+function recordOcrResponses() {
+  const send = chrome.runtime.sendMessage.bind(chrome.runtime);
+  chrome.runtime.sendMessage = (message, ...rest) => {
+    const callback = typeof rest.at(-1) === 'function' ? rest.pop() : null;
+    if (message?.type !== 'do-ocr' || !callback) return send(message, ...rest, ...(callback ? [callback] : []));
+    return send(message, ...rest, response => {
+      if (response?.success) lastOcr = { raw: response.text || '', text: cleanOcrText(response.text || '') };
+      callback(response);
+    });
+  };
 }
 
 export function installDevBridge({ exportAllImages, handleToolbarAction, buildId }) {
+  recordOcrResponses();
   const reply = (type, payload) => window.postMessage({ source: 'imgloupe-dev-result', type, ...payload }, location.origin);
   document.documentElement.dataset.imgloupeDevBuild = buildId;
   window.addEventListener('message', async event => {

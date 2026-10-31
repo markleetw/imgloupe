@@ -28,7 +28,7 @@ if ((manifest.host_permissions || []).join(',') !== 'https://docs.google.com/*,h
 if (manifest.web_accessible_resources) throw new Error('Unexpected web-accessible resources');
 if (!/__MSG_extName__/.test(manifest.name) || manifest.default_locale !== 'en') throw new Error('Manifest must use localized name and English default locale');
 for (const file of files.filter(name => /\.(m?js|html)$/.test(name))) {
-  if (/imgloupe-dev|imgloupe:dev-|function (inspectExportParts|installDevBridge|recordDevOcr)\b/.test(await zip.file(file).async('string'))) throw new Error(`Development bridge in publication file: ${file}`);
+  if (/imgloupe-dev|imgloupe:dev-|\b(inspectExportParts|installDevBridge|recordOcrResponses|recordDevOcr)\b|\bif \(false\)/.test(await zip.file(file).async('string'))) throw new Error(`Development bridge in publication file: ${file}`);
 }
 const html = await zip.file('dist/popup/index.html').async('string');
 if (/https?:[^\s"']+\.(js|css)/.test(html)) throw new Error('Popup must not load remote resources');

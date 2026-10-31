@@ -19,16 +19,17 @@ function clearGenerated(name) {
 clearGenerated('dist.next');
 const stage = join(root, 'dist.next');
 const copy = (source, target) => { mkdirSync(dirname(target), { recursive: true }); cpSync(source, target); };
-// Development builds (npm run build:dev) add the page-driven test bridge in
-// src/content/dev-bridge.js; store builds compile it out.
+// Development builds (npm run build:dev) start from separate entries that add
+// the page-driven test bridge (src/content/dev-bridge.js); store builds never
+// import it.
 const dev = process.argv.includes('--dev') || process.env.IMGLOUPE_DEV === '1';
 const base = {
   bundle: true, platform: 'browser', target: 'chrome116', minify: false, legalComments: 'inline',
-  define: { __IMGLOUPE_DEV__: JSON.stringify(dev), __IMGLOUPE_BUILD_ID__: JSON.stringify(dev ? new Date().toISOString() : '') }
+  define: { __IMGLOUPE_BUILD_ID__: JSON.stringify(dev ? new Date().toISOString() : '') }
 };
 const entries = [
-  ['src/content/index.js', 'contentScripts/index.global.js', 'iife'],
-  ['src/background/index.js', 'background/index.mjs', 'iife'],
+  [dev ? 'src/content/dev-entry.js' : 'src/content/index.js', 'contentScripts/index.global.js', 'iife'],
+  [dev ? 'src/background/dev-entry.js' : 'src/background/index.js', 'background/index.mjs', 'iife'],
   ['src/offscreen/offscreen.js', 'offscreen/offscreen.js', 'iife'],
   ['src/popup/popup.js', 'popup/popup.js', 'iife']
 ];

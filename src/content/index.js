@@ -19,7 +19,6 @@ import { initSheetsHandler, getActiveSheetsImageUrl } from "./sheets/sheets-hand
 import { initSlidesHandler, getActiveSlidesImageUrl } from "./slides/slides-handler.js";
 import { imageCache } from "./shared/lru-cache.js";
 import { GET_APP_TYPE_MESSAGE, EXPORT_IMAGES_MESSAGE } from "../shared/messages.js";
-import { installDevBridge } from "./dev-bridge.js";
 
 // The three supported apps, keyed by the first segment of the document path.
 const APPS = Object.freeze({
@@ -113,11 +112,4 @@ export function bootstrap() {
   };
 }
 
-if (typeof window !== "undefined") {
-  bootstrap();
-  // eslint-disable-next-line no-undef
-  if (typeof __IMGLOUPE_DEV__ !== "undefined" && __IMGLOUPE_DEV__ && currentApp()) {
-    // eslint-disable-next-line no-undef
-    installDevBridge({ exportAllImages, handleToolbarAction, buildId: __IMGLOUPE_BUILD_ID__ });
-  }
-}
+if (typeof window !== "undefined") bootstrap();
