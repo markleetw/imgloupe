@@ -95,10 +95,13 @@ for (const size of [16, 32, 48, 128, 512]) {
 }
 // Compose the same source artwork for README headers and GitHub link previews.
 // Lettering is paths so all build platforms render identical assets without fonts.
+// Compose the padded masters in artwork coordinates without clipping their edges.
+const svgBody = source => source.toString().replace(/<svg\b[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+const artwork = (source, transform) => `<g transform="${transform}">${svgBody(source)}</g>`;
 const mark = readFileSync('src/branding/mark.svg');
 const wordmark = readFileSync('src/branding/wordmark.svg');
-const logo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220"><rect width="800" height="220" rx="24" fill="#fdfbf5"/>${nestedSvg(mark, 'x="26" y="24" width="180" height="172"')}${nestedSvg(wordmark, 'x="230" y="59" width="540" height="121"')}</svg>`;
-const social = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640"><rect width="1280" height="640" fill="#fdfbf5"/>${nestedSvg(logo, 'x="100" y="172" width="1080" height="297"')}</svg>`;
+const logo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220"><rect width="800" height="220" rx="24" fill="#fdfbf5"/>${artwork(mark, `translate(26 24) scale(${180 / 530}) translate(-370 -143)`)}${artwork(wordmark, `translate(230 59) scale(${540 / 826}) translate(-220 -685)`)}</svg>`;
+const social = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640"><rect width="1280" height="640" fill="#fdfbf5"/>${artwork(logo, 'translate(100 172) scale(1.35)')}</svg>`;
 clearGenerated('assets');
 mkdirSync('assets');
 for (const [size, png] of icons) writeFileSync(size === 512 ? 'assets/icon.png' : `assets/icon${size}.png`, png);
