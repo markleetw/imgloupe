@@ -1,0 +1,299 @@
+{
+  "extName": {
+    "message": "ImgLoupe：圖片預覽與文字辨識"
+  },
+  "extShortName": {
+    "message": "ImgLoupe"
+  },
+  "extDescription": {
+    "message": "在 Google 文件、試算表與簡報中預覽、放大、複製與下載圖片，在本機辨識文字，並可一鍵打包全部圖片。"
+  },
+  "appDocs": {
+    "message": "Google 文件"
+  },
+  "appSheets": {
+    "message": "Google 試算表"
+  },
+  "appSlides": {
+    "message": "Google 簡報"
+  },
+  "toolbarLabel": {
+    "message": "圖片操作"
+  },
+  "actionPreview": {
+    "message": "放大檢視"
+  },
+  "actionCopy": {
+    "message": "複製圖片"
+  },
+  "actionOcr": {
+    "message": "擷取文字"
+  },
+  "actionDownload": {
+    "message": "下載圖片"
+  },
+  "viewerZoomIn": {
+    "message": "放大"
+  },
+  "viewerZoomOut": {
+    "message": "縮小"
+  },
+  "viewerOneToOne": {
+    "message": "原始大小"
+  },
+  "viewerReset": {
+    "message": "重設"
+  },
+  "viewerPrev": {
+    "message": "上一張"
+  },
+  "viewerNext": {
+    "message": "下一張"
+  },
+  "viewerRotateLeft": {
+    "message": "向左旋轉"
+  },
+  "viewerRotateRight": {
+    "message": "向右旋轉"
+  },
+  "viewerCropOcr": {
+    "message": "局部框選辨識"
+  },
+  "cropHint": {
+    "message": "請拖曳滑鼠圈選要辨識的文字區域，放開即開始辨識"
+  },
+  "cropCancel": {
+    "message": "取消圈選"
+  },
+  "toastCropEmpty": {
+    "message": "圈選範圍沒有擷取到圖像"
+  },
+  "toastImageCopied": {
+    "message": "已複製圖片"
+  },
+  "toastClipboardUnsupported": {
+    "message": "這個瀏覽器無法把圖片放進剪貼簿"
+  },
+  "toastImageUnreadable": {
+    "message": "無法讀取這張圖片，請重新選取後再試"
+  },
+  "toastClipboardBlocked": {
+    "message": "無法寫入剪貼簿，請點一下頁面後再試"
+  },
+  "toastNoImageSource": {
+    "message": "找不到這張圖片的來源，請重新選取"
+  },
+  "toastDownloading": {
+    "message": "下載中…"
+  },
+  "toastDownloadFailed": {
+    "message": "下載失敗，請重新選取圖片後再試"
+  },
+  "toastDownloaded": {
+    "message": "已下載圖片"
+  },
+  "toastExporting": {
+    "message": "正在向 Google 取得文件匯出檔…"
+  },
+  "toastExportFallback": {
+    "message": "無法取得文件匯出檔，改為打包已載入的圖片…"
+  },
+  "toastNoImagesFound": {
+    "message": "這份文件裡找不到圖片"
+  },
+  "toastPacking": {
+    "message": "正在打包圖片（$DONE$/$TOTAL$）…",
+    "placeholders": {
+      "done": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "toastZipping": {
+    "message": "正在產生 ZIP 檔…"
+  },
+  "toastZipDone": {
+    "message": "已打包 $COUNT$ 張圖片",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastZipDoneOne": {
+    "message": "已打包 $COUNT$ 張圖片",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastZipDonePartial": {
+    "message": "已打包 $COUNT$ 張圖片，另有 $FAILED$ 張失敗（詳見 ZIP 內的報告）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "failed": {
+        "content": "$2"
+      }
+    }
+  },
+  "toastZipDonePartialOne": {
+    "message": "已打包 $COUNT$ 張圖片，另有 $FAILED$ 張失敗（詳見 ZIP 內的報告）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "failed": {
+        "content": "$2"
+      }
+    }
+  },
+  "toastZipFailed": {
+    "message": "打包失敗：無法取得任何圖片"
+  },
+  "toastOcrNoImage": {
+    "message": "未選取圖片，無法辨識文字"
+  },
+  "toastOcrRunning": {
+    "message": "正在辨識圖片文字…"
+  },
+  "toastOcrCopied": {
+    "message": "已複製圖片文字（$COUNT$ 字）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastOcrCopiedOne": {
+    "message": "已複製圖片文字（$COUNT$ 字）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastOcrCopyFailed": {
+    "message": "文字辨識完成，但無法寫入剪貼簿，請再試一次"
+  },
+  "toastOcrNoText": {
+    "message": "圖片中未偵測到文字"
+  },
+  "toastOcrFailed": {
+    "message": "文字辨識失敗，請再試一次"
+  },
+  "popupTagline": {
+    "message": "圖片預覽與文字辨識"
+  },
+  "popupVersionLabel": {
+    "message": "版本"
+  },
+  "popupChecking": {
+    "message": "正在讀取文件…"
+  },
+  "popupCurrentCaption": {
+    "message": "目前開啟"
+  },
+  "popupDownloadSection": {
+    "message": "圖片下載"
+  },
+  "popupExportButton": {
+    "message": "打包下載圖片"
+  },
+  "popupExportIdle": {
+    "message": "將文件中的圖片存成 ZIP 檔。"
+  },
+  "popupUsageSection": {
+    "message": "操作提示"
+  },
+  "popupUsageTitle": {
+    "message": "點一下文件裡的圖片"
+  },
+  "popupUsageBody": {
+    "message": "圖片外側就會出現這些按鈕："
+  },
+  "popupUsageActions": {
+    "message": "放大 · 複製 · 擷取文字 · 下載"
+  },
+  "popupOcrTitle": {
+    "message": "辨識圖片上的文字"
+  },
+  "popupOcrLanguages": {
+    "message": "繁體中文／英文"
+  },
+  "popupReportIssue": {
+    "message": "回報問題"
+  },
+  "popupPrivacy": {
+    "message": "隱私說明"
+  },
+  "popupUnsupported": {
+    "message": "還沒開啟支援的文件"
+  },
+  "popupUnsupportedHint": {
+    "message": "先開啟一份 Google 文件、試算表或簡報，就能下載圖片。若已開啟，請重新整理頁面再試一次。"
+  },
+  "popupExporting": {
+    "message": "正在打包圖片…"
+  },
+  "popupResultExport": {
+    "message": "已從文件匯出 $COUNT$ 張圖片。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultExportOne": {
+    "message": "已從文件匯出 $COUNT$ 張圖片。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultLoaded": {
+    "message": "已打包 $COUNT$ 張已載入的圖片。無法取得文件匯出檔，未捲動到的頁面可能缺圖。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultLoadedOne": {
+    "message": "已打包 $COUNT$ 張已載入的圖片。無法取得文件匯出檔，未捲動到的頁面可能缺圖。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultFailed": {
+    "message": "另有 $FAILED$ 張未成功。",
+    "placeholders": {
+      "failed": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultNone": {
+    "message": "這份文件裡找不到圖片。"
+  },
+  "popupExportFailedState": {
+    "message": "暫時無法下載"
+  },
+  "popupExportFailed": {
+    "message": "下載沒成功，請重新整理文件後再試一次。"
+  },
+  "popupOpenFailed": {
+    "message": "面板開啟失敗，請關閉後再開一次。"
+  },
+  "htmlLang": {
+    "message": "zh-Hant-TW"
+  }
+}

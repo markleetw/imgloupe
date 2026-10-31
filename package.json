@@ -1,0 +1,37 @@
+{
+  "name": "imgloupe",
+  "version": "1.0.0",
+  "description": "ImgLoupe previews, zooms, copies and downloads images in Google Docs, Sheets and Slides, with on-device English/Traditional Chinese OCR and whole-document ZIP export.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "pretest": "npm run build",
+    "test": "node --test tests/extension.test.js tests/unit/*.test.mjs",
+    "test:browser": "npm run build && playwright test",
+    "check-syntax": "node -c dist/contentScripts/index.global.js && node -c dist/offscreen/offscreen.js && node -c dist/background/index.mjs && node -c dist/popup/popup.js",
+    "build:zip": "npm run build && node scripts/package.mjs && node scripts/verify-package.mjs",
+    "build:dev": "node scripts/build.mjs --dev"
+  },
+  "keywords": [
+    "chrome-extension",
+    "google-docs",
+    "google-sheets",
+    "google-slides",
+    "image-zoom"
+  ],
+  "author": "Mark Lee",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@resvg/resvg-js": "2.6.2",
+    "esbuild": "0.28.2"
+  },
+  "dependencies": {
+    "jszip": "3.10.1",
+    "tesseract.js": "5.1.1",
+    "tesseract.js-core": "5.1.1",
+    "viewerjs": "1.11.6"
+  }
+}

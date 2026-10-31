@@ -1,0 +1,11 @@
+.DS_Store
+*.zip
+node_modules/
+scratch/
+*.log
+*.tmp
+dist/
+dist.next/
+build/
+test-results/
+playwright-report/

@@ -1,0 +1,36 @@
+#imgloupeToolbar {
+  display: flex; gap: 2px; padding: 3px; border: 1px solid #d3e2df;
+  border-radius: 9px; background: #fff; color: #005753;
+  box-shadow: 0 3px 12px #202b4126; z-index: 2147481000; pointer-events: auto;
+  font-family: system-ui, sans-serif;
+}
+#imgloupeToolbar .imgloupe-action {
+  display: grid; place-items: center; width: 32px; height: 32px; padding: 5px;
+  border: 0; border-radius: 6px; color: inherit; background: transparent; cursor: pointer;
+}
+#imgloupeToolbar .imgloupe-action svg { width: 22px; height: 22px; }
+#imgloupeToolbar .imgloupe-action:hover { background: #e3f0ed; }
+#imgloupeToolbar .imgloupe-action:disabled { opacity: .5; cursor: wait; }
+#imgloupeToolbar .imgloupe-action:focus-visible { outline: 2px solid #005753; outline-offset: -2px; }
+#imgloupeToolbar.imgloupe-actions--preview-hidden { visibility: hidden; pointer-events: none; }
+.viewer-toolbar > ul > li.imgloupe-has-svg { background: #202b41; color: white; width: 40px; height: 40px; margin-top: 0; margin-bottom: 0; }
+.viewer-toolbar > ul > li.imgloupe-has-svg::before { display: none; }
+.viewer-toolbar > ul > li.imgloupe-has-svg svg { width: 22px; height: 22px; margin: 9px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+/* Viewer delegates built-in actions from the LI event target. */
+.viewer-toolbar > ul > li.imgloupe-has-svg svg,
+.viewer-toolbar > ul > li.imgloupe-has-svg svg * { pointer-events: none; }
+.viewer-toolbar > ul > li.imgloupe-has-svg.is-active { background: #00756f; }
+.imgloupe-crop-overlay { position: absolute; inset: 0; z-index: 2020; touch-action: none; cursor: crosshair; }
+.imgloupe-crop-hint { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex;
+  align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; color: white;
+  background: #202b41; font: 13px system-ui, sans-serif; z-index: 2026; }
+.imgloupe-crop-hint-close { color: white; background: transparent; border: 0; font-size: 18px; cursor: pointer; }
+.imgloupe-crop-box { position: absolute; border: 2px dashed #bdf2e5; background: #2aa39a4d;
+  box-shadow: 0 0 0 9999px #0006; pointer-events: none; }
+.imgloupe-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 0);
+  max-width: min(560px, calc(100vw - 32px)); padding: 9px 16px; border-radius: 10px;
+  color: #fff; background: #202b41; box-shadow: 0 6px 20px #202b4140;
+  font: 13px/1.45 system-ui, sans-serif; z-index: 2147483647; pointer-events: none;
+  opacity: 1; transition: opacity .25s ease, transform .25s ease, bottom .25s ease; }
+.imgloupe-toast--above-preview { bottom: 88px; }
+.imgloupe-toast--leaving { opacity: 0; transform: translate(-50%, 8px); }

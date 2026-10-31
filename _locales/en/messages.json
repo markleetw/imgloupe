@@ -1,0 +1,308 @@
+{
+  "extName": {
+    "message": "ImgLoupe: Image Preview & Text Recognition",
+    "description": "Extension name; must not include Google trademarks"
+  },
+  "extShortName": {
+    "message": "ImgLoupe",
+    "description": "Short name"
+  },
+  "extDescription": {
+    "message": "Preview, zoom, copy and download images in Google Docs, Sheets and Slides, with on-device OCR and one-click ZIP export.",
+    "description": "Store/extension description, at most 132 characters"
+  },
+  "appDocs": {
+    "message": "Google Docs"
+  },
+  "appSheets": {
+    "message": "Google Sheets"
+  },
+  "appSlides": {
+    "message": "Google Slides"
+  },
+  "toolbarLabel": {
+    "message": "Image actions"
+  },
+  "actionPreview": {
+    "message": "Preview"
+  },
+  "actionCopy": {
+    "message": "Copy image"
+  },
+  "actionOcr": {
+    "message": "Extract text"
+  },
+  "actionDownload": {
+    "message": "Download image"
+  },
+  "viewerZoomIn": {
+    "message": "Zoom in"
+  },
+  "viewerZoomOut": {
+    "message": "Zoom out"
+  },
+  "viewerOneToOne": {
+    "message": "Actual size"
+  },
+  "viewerReset": {
+    "message": "Reset"
+  },
+  "viewerPrev": {
+    "message": "Previous"
+  },
+  "viewerNext": {
+    "message": "Next"
+  },
+  "viewerRotateLeft": {
+    "message": "Rotate left"
+  },
+  "viewerRotateRight": {
+    "message": "Rotate right"
+  },
+  "viewerCropOcr": {
+    "message": "Recognize text in an area"
+  },
+  "cropHint": {
+    "message": "Drag over the text to recognize; it starts when you release."
+  },
+  "cropCancel": {
+    "message": "Cancel selection"
+  },
+  "toastCropEmpty": {
+    "message": "The selected area doesn't contain any image."
+  },
+  "toastImageCopied": {
+    "message": "Image copied"
+  },
+  "toastClipboardUnsupported": {
+    "message": "This browser can't put images on the clipboard."
+  },
+  "toastImageUnreadable": {
+    "message": "Couldn't read this image. Select it again and retry."
+  },
+  "toastClipboardBlocked": {
+    "message": "Couldn't write to the clipboard. Click the page and try again."
+  },
+  "toastNoImageSource": {
+    "message": "Couldn't find this image's source. Select it again."
+  },
+  "toastDownloading": {
+    "message": "Downloading…"
+  },
+  "toastDownloadFailed": {
+    "message": "Download failed. Select the image again and retry."
+  },
+  "toastDownloaded": {
+    "message": "Image downloaded"
+  },
+  "toastExporting": {
+    "message": "Getting the document export from Google…"
+  },
+  "toastExportFallback": {
+    "message": "The document export isn't available; packing loaded images instead…"
+  },
+  "toastNoImagesFound": {
+    "message": "No images found in this document."
+  },
+  "toastPacking": {
+    "message": "Packing images ($DONE$/$TOTAL$)…",
+    "placeholders": {
+      "done": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "toastZipping": {
+    "message": "Creating the ZIP file…"
+  },
+  "toastZipDone": {
+    "message": "Packed $COUNT$ images.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastZipDoneOne": {
+    "message": "Packed $COUNT$ image.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    },
+    "description": "Used when the count is 1."
+  },
+  "toastZipDonePartial": {
+    "message": "Packed $COUNT$ images; $FAILED$ failed (see the report in the ZIP).",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "failed": {
+        "content": "$2"
+      }
+    }
+  },
+  "toastZipDonePartialOne": {
+    "message": "Packed $COUNT$ image; $FAILED$ failed (see the report in the ZIP).",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "failed": {
+        "content": "$2"
+      }
+    },
+    "description": "Used when the count is 1."
+  },
+  "toastZipFailed": {
+    "message": "Packing failed: no image could be downloaded."
+  },
+  "toastOcrNoImage": {
+    "message": "No image selected for text recognition."
+  },
+  "toastOcrRunning": {
+    "message": "Recognizing text…"
+  },
+  "toastOcrCopied": {
+    "message": "Copied recognized text ($COUNT$ characters)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastOcrCopiedOne": {
+    "message": "Copied recognized text ($COUNT$ character)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    },
+    "description": "Used when the count is 1."
+  },
+  "toastOcrCopyFailed": {
+    "message": "Text recognized, but it couldn't be written to the clipboard. Try again."
+  },
+  "toastOcrNoText": {
+    "message": "No text detected in the image."
+  },
+  "toastOcrFailed": {
+    "message": "Text recognition failed. Try again."
+  },
+  "popupTagline": {
+    "message": "Image preview & text recognition"
+  },
+  "popupVersionLabel": {
+    "message": "Version"
+  },
+  "popupChecking": {
+    "message": "Checking this tab…"
+  },
+  "popupCurrentCaption": {
+    "message": "Current tab"
+  },
+  "popupDownloadSection": {
+    "message": "Image download"
+  },
+  "popupExportButton": {
+    "message": "Download all images (ZIP)"
+  },
+  "popupExportIdle": {
+    "message": "Save the document's images as a ZIP file."
+  },
+  "popupUsageSection": {
+    "message": "Usage tips"
+  },
+  "popupUsageTitle": {
+    "message": "Click an image in the document"
+  },
+  "popupUsageBody": {
+    "message": "These buttons appear just outside it:"
+  },
+  "popupUsageActions": {
+    "message": "Preview · Copy · Extract text · Download"
+  },
+  "popupOcrTitle": {
+    "message": "Recognize text in images"
+  },
+  "popupOcrLanguages": {
+    "message": "English / Traditional Chinese"
+  },
+  "popupReportIssue": {
+    "message": "Report an issue"
+  },
+  "popupPrivacy": {
+    "message": "Privacy"
+  },
+  "popupUnsupported": {
+    "message": "No supported document open"
+  },
+  "popupUnsupportedHint": {
+    "message": "Open a Google Docs, Sheets or Slides file to download its images. If one is open, reload the page and try again."
+  },
+  "popupExporting": {
+    "message": "Packing images…"
+  },
+  "popupResultExport": {
+    "message": "Exported $COUNT$ images from the document.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultExportOne": {
+    "message": "Exported $COUNT$ image from the document.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    },
+    "description": "Used when the count is 1."
+  },
+  "popupResultLoaded": {
+    "message": "Packed $COUNT$ loaded images. The document export wasn't available, so pages you haven't scrolled to may be missing.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultLoadedOne": {
+    "message": "Packed $COUNT$ loaded image. The document export wasn't available, so pages you haven't scrolled to may be missing.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    },
+    "description": "Used when the count is 1."
+  },
+  "popupResultFailed": {
+    "message": "$FAILED$ more could not be downloaded.",
+    "placeholders": {
+      "failed": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupResultNone": {
+    "message": "No images found in this document."
+  },
+  "popupExportFailedState": {
+    "message": "Download unavailable"
+  },
+  "popupExportFailed": {
+    "message": "The download didn't complete. Reload the document and try again."
+  },
+  "popupOpenFailed": {
+    "message": "The panel failed to open. Close it and try again."
+  },
+  "htmlLang": {
+    "message": "en",
+    "description": "BCP 47 language tag of this locale, used for the html lang attribute"
+  }
+}

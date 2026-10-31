@@ -1,0 +1,54 @@
+{
+   "manifest_version": 3,
+   "name": "__MSG_extName__",
+   "short_name": "__MSG_extShortName__",
+   "description": "__MSG_extDescription__",
+   "version": "1.0.0",
+   "default_locale": "en",
+   "minimum_chrome_version": "116",
+   "icons": {
+      "128": "assets/icon128.png",
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png"
+   },
+   "action": {
+      "default_icon": {
+         "16": "assets/icon16.png",
+         "32": "assets/icon32.png",
+         "48": "assets/icon48.png",
+         "128": "assets/icon128.png"
+      },
+      "default_popup": "dist/popup/index.html",
+      "default_title": "__MSG_extName__"
+   },
+   "background": {
+      "service_worker": "dist/background/index.mjs"
+   },
+   "content_scripts": [
+      {
+         "matches": [
+            "https://docs.google.com/document/*",
+            "https://docs.google.com/spreadsheets/*",
+            "https://docs.google.com/presentation/*"
+         ],
+         "js": [
+            "dist/contentScripts/index.global.js"
+         ],
+         "css": [
+            "dist/contentScripts/style.css"
+         ]
+      }
+   ],
+   "permissions": [
+      "offscreen",
+      "clipboardWrite"
+   ],
+   "host_permissions": [
+      "https://docs.google.com/*",
+      "https://*.googleusercontent.com/*"
+   ],
+   "content_security_policy": {
+      "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+   }
+}
