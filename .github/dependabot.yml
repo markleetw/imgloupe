@@ -1,5 +1,9 @@
 # Monthly update PRs for the pinned workflow actions and npm packages. CI must
-# pass before merging; OCR and model files in vendor/ are updated by hand.
+# pass before merging. tesseract.js and tesseract.js-core must stay on the same
+# major version, so they are grouped and their major upgrades are done by hand
+# (with an OCR check on real documents); OCR model files in vendor/ are also
+# updated by hand. Runtime package updates change the store build: update
+# THIRD_PARTY_NOTICES.md and test manually before releasing them.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -14,6 +18,13 @@ updates:
     schedule:
       interval: monthly
     groups:
+      tesseract:
+        patterns: ['tesseract.js', 'tesseract.js-core']
       dev-dependencies:
         dependency-type: development
+    ignore:
+      - dependency-name: 'tesseract.js'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'tesseract.js-core'
+        update-types: ['version-update:semver-major']
     open-pull-requests-limit: 5
