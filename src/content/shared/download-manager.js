@@ -52,20 +52,26 @@ export function imageExtensionFor(blob, url = '') {
 
 export function triggerBlobDownload(blob, filename) {
   if (typeof document === "undefined") return;
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  const timer = window.setTimeout(() => URL.revokeObjectURL(url), 60000);
-  if (timer && typeof timer.unref === "function") {
-    timer.unref();
-  }
+  const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: filename });
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // Keep the address valid until Chrome has started the download.
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 60000)?.unref?.();
+}
+
+// Run `task` on every item, at most `limit` at a time, sharing one index
+// iterator between the lanes.
+async function forEachConcurrently(items, limit, task) {
+  const indexes = items.keys();
+  const lane = async () => {
+    for (const index of indexes) await task(items[index], index);
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, lane));
 }
 
 const FETCH_TIMEOUT_MS = 20000;
+const CONCURRENT_FETCHES = 4;
 const withTimeout = (ms) => (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function'
   ? { signal: AbortSignal.timeout(ms) } : {});
 
@@ -174,28 +180,23 @@ async function packItems(items, { source, onProgress, JSZipClass = JSZip }) {
   const zip = new JSZipClass();
   const failures = [];
   const loaded = new Array(items.length);
-  let currentIndex = 0;
-  let doneCount = 0;
-  uiToast(t('toastPacking', 0, items.length), 0);
-
-  const worker = async () => {
-    while (currentIndex < items.length) {
-      const idx = currentIndex++;
-      const item = items[idx];
-      try {
-        const blob = await item.load();
-        loaded[idx] = { blob, fingerprint: await sha256Hex(blob) };
-      } catch (error) {
-        failures[idx] = { location: item.location, address: item.address, error };
-      }
-      doneCount++;
-      uiToast(t('toastPacking', doneCount, items.length), 0);
-      if (typeof onProgress === 'function') {
-        try { onProgress(doneCount, items.length); } catch { /* progress is advisory */ }
-      }
-    }
+  let finished = 0;
+  const report = () => {
+    uiToast(t('toastPacking', finished, items.length), 0);
+    if (finished === 0 || typeof onProgress !== 'function') return;
+    try { onProgress(finished, items.length); } catch { /* progress is advisory */ }
   };
-  await Promise.all(Array.from({ length: Math.min(4, items.length) }, worker));
+  report();
+  await forEachConcurrently(items, CONCURRENT_FETCHES, async (item, index) => {
+    try {
+      const blob = await item.load();
+      loaded[index] = { blob, fingerprint: await sha256Hex(blob) };
+    } catch (error) {
+      failures[index] = { location: item.location, address: item.address, error };
+    }
+    finished += 1;
+    report();
+  });
 
   // Name files after all loads finish so numbering is consecutive and follows
   // the source order no matter which download completed first. Of identical
@@ -207,10 +208,11 @@ async function packItems(items, { source, onProgress, JSZipClass = JSZip }) {
     fingerprints.add(entry.fingerprint);
     unique.push({ blob: entry.blob, label: items[idx].label });
   });
-  const padLength = Math.max(2, String(unique.length).length);
-  unique.forEach(({ blob, label }, position) => {
-    zip.file(`image-${String(position + 1).padStart(padLength, '0')}.${imageExtensionFor(blob, label)}`, blob);
-  });
+  const digits = Math.max(2, `${unique.length}`.length);
+  for (const [position, { blob, label }] of unique.entries()) {
+    const number = `${position + 1}`.padStart(digits, '0');
+    zip.file(`image-${number}.${imageExtensionFor(blob, label)}`, blob);
+  }
   const savedCount = unique.length;
 
   const failed = failures.filter(Boolean);

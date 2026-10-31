@@ -2,7 +2,6 @@ import { uiToast } from './toast.js';
 import { t } from '../../shared/i18n.js';
 
 export const TOOLBAR_ID = 'imgloupeToolbar';
-export const PREVIEW_HIDDEN_CLASS = 'imgloupe-actions--preview-hidden';
 export const OCR_ICON_DRAWING = '<path d="M4 8V4h4m8 0h4v4m0 8v4h-4M8 20H4v-4M8 9h8m-4 0v7"/>';
 export const ACTION_BUTTON_IDS = Object.freeze({
   zoom: 'imgloupe-action-preview',
@@ -10,11 +9,12 @@ export const ACTION_BUTTON_IDS = Object.freeze({
   ocr: 'imgloupe-action-ocr',
   download: 'imgloupe-action-download'
 });
-const actions = [
-  ['zoom', 'actionPreview', '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M7 10h6M10 7v6"/>'],
-  ['copy', 'actionCopy', '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 5H5v10"/>'],
-  ['ocr', 'actionOcr', OCR_ICON_DRAWING],
-  ['download', 'actionDownload', '<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>']
+// Buttons in display order: action name, label message, icon drawing (24×24).
+const BUTTONS = [
+  { action: 'zoom', label: 'actionPreview', icon: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M7 10h6M10 7v6"/>' },
+  { action: 'copy', label: 'actionCopy', icon: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 5H5v10"/>' },
+  { action: 'ocr', label: 'actionOcr', icon: OCR_ICON_DRAWING },
+  { action: 'download', label: 'actionDownload', icon: '<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>' }
 ];
 
 let defaultActionHandler = null;
@@ -22,39 +22,49 @@ export function setToolbarActionHandler(handler) {
   defaultActionHandler = handler;
 }
 
+const iconSvg = drawing => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
+  + `stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${drawing}</svg>`;
+
+function makeButton({ action, label, icon }) {
+  const text = t(label);
+  const button = document.createElement('button');
+  Object.assign(button, { type: 'button', id: ACTION_BUTTON_IDS[action], className: 'imgloupe-action', title: text });
+  button.setAttribute('aria-label', text);
+  button.setAttribute('data-action', action);
+  button.innerHTML = iconSvg(icon);
+  return button;
+}
+
+// The single toolbar shared by all selections. Clicks are handled once on the
+// toolbar: the button is disabled while its action runs, and a successful copy
+// is confirmed with a message.
 export function createFloatingToolbar(actionHandler = defaultActionHandler) {
-  let toolbar = document.getElementById(TOOLBAR_ID);
-  if (toolbar) return toolbar;
-  toolbar = document.createElement('div');
-  toolbar.id = TOOLBAR_ID;
-  toolbar.className = 'imgloupe-actions';
+  const existing = document.getElementById(TOOLBAR_ID);
+  if (existing) return existing;
+  const toolbar = document.createElement('div');
+  Object.assign(toolbar, { id: TOOLBAR_ID, className: 'imgloupe-actions' });
   toolbar.setAttribute('role', 'toolbar');
   toolbar.setAttribute('aria-label', t('toolbarLabel'));
   toolbar.style.display = 'none';
-  for (const [action, labelKey, drawing] of actions) {
-    const label = t(labelKey);
-    const button = document.createElement('button');
-    button.id = ACTION_BUTTON_IDS[action];
-    button.type = 'button';
-    button.title = label;
-    button.className = 'imgloupe-action';
-    button.setAttribute('aria-label', label);
-    button.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${drawing}</svg>`;
-    button.onclick = async () => {
-      button.disabled = true;
-      try {
-        const success = await actionHandler?.(action);
-        if (action === 'copy' && success) uiToast(t('toastImageCopied'), 2000);
-      }
-      finally { button.disabled = false; }
-    };
-    toolbar.appendChild(button);
-  }
-  document.body.appendChild(toolbar);
+  toolbar.append(...BUTTONS.map(makeButton));
+  toolbar.addEventListener('click', async event => {
+    const button = event.target?.closest?.('.imgloupe-action');
+    if (!button || button.parentElement !== toolbar || button.disabled) return;
+    const action = button.getAttribute('data-action');
+    button.disabled = true;
+    try {
+      const done = await actionHandler?.(action);
+      if (done && action === 'copy') uiToast(t('toastImageCopied'), 2000);
+    } finally {
+      button.disabled = false;
+    }
+  });
+  document.body.append(toolbar);
   return toolbar;
 }
 
 const GAP = 8;
+const CLIPPING = new Set(['auto', 'scroll', 'hidden']);
 
 // Visible area of the document: the viewport clipped by every scrolling
 // ancestor of the image, so the toolbar never covers the app's menus,
@@ -64,11 +74,12 @@ export function visibleBounds(element) {
   const own = element?.getBoundingClientRect?.();
   // A clipping wrapper the size of the image itself is not the editing area.
   const wrapsImage = r => own && ['left', 'top', 'right', 'bottom'].every(side => Math.abs(r[side] - own[side]) <= 2);
-  for (let node = element?.parentElement; node && node !== document.body && node !== document.documentElement; node = node.parentElement) {
-    const style = getComputedStyle(node);
-    if (!/(auto|scroll|hidden)/.test(`${style.overflowX} ${style.overflowY}`)) continue;
+  const page = new Set([document.body, document.documentElement]);
+  for (let node = element?.parentElement; node && !page.has(node); node = node.parentElement) {
+    const { overflowX, overflowY } = getComputedStyle(node);
+    if (![overflowX, overflowY].some(value => CLIPPING.has(value))) continue;
     const r = node.getBoundingClientRect();
-    if (r.width < 1 || r.height < 1 || wrapsImage(r)) continue;
+    if (Math.min(r.width, r.height) < 1 || wrapsImage(r)) continue;
     bounds = { left: Math.max(bounds.left, r.left), top: Math.max(bounds.top, r.top),
       right: Math.min(bounds.right, r.right), bottom: Math.min(bounds.bottom, r.bottom) };
   }
@@ -118,10 +129,9 @@ export function hideToolbar() {
   if (toolbar) toolbar.style.display = 'none';
 }
 
+// While the preview is open the toolbar keeps its place but is inert: not
+// shown, not clickable and out of the accessibility tree.
 export function toggleToolbarPreviewHidden(hidden) {
   const toolbar = document.getElementById(TOOLBAR_ID);
-  if (!toolbar) return;
-  toolbar.classList.toggle(PREVIEW_HIDDEN_CLASS, hidden);
-  if (hidden) toolbar.setAttribute('aria-hidden', 'true');
-  else toolbar.removeAttribute('aria-hidden');
+  if (toolbar) toolbar.inert = Boolean(hidden);
 }

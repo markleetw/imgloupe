@@ -1,16 +1,32 @@
+// Google Slides: images on the slide being edited are SVG <image> elements in
+// the workspace. A click picks the topmost one under the pointer; without a
+// click (the page changed) the previously selected image is re-checked.
 import { trackSelection } from '../shared/selection-tracker.js';
-let activeUrl = '';
-let initialized = false;
-export const getActiveSlidesImageUrl = () => activeUrl;
+
+const WORKSPACE = '#workspace-container';
+const WATCHED = '#workspace-container image';
+
+let selectedUrl = '';
+let started = false;
+
+export const getActiveSlidesImageUrl = () => selectedUrl;
+
+const isWorkspaceImage = node => node?.tagName?.toLowerCase() === 'image' && Boolean(node.closest?.(WORKSPACE));
+
+function candidate(pointer, previous) {
+  if (!pointer) return previous?.element;
+  return document.elementsFromPoint(pointer.x, pointer.y).find(isWorkspaceImage);
+}
+
+function resolveSlidesImage(pointer, _isCurrent, previous) {
+  const image = candidate(pointer, previous);
+  if (!image?.isConnected || !image.closest(WORKSPACE)) return null;
+  const url = ['href', 'xlink:href'].map(name => image.getAttribute(name)).find(Boolean);
+  return url ? { element: image, url } : null;
+}
 
 export function initSlidesHandler() {
-  if (initialized) return;
-  initialized = true;
-  trackSelection((pointer, _isCurrent, previous) => {
-    const stack = pointer ? document.elementsFromPoint(pointer.x, pointer.y) : [];
-    const image = pointer ? stack.find(element => element.tagName?.toLowerCase() === 'image' && element.closest('#workspace-container')) : previous?.element;
-    if (!image?.isConnected || !image.closest('#workspace-container')) return null;
-    const url = image?.getAttribute('href') || image?.getAttribute('xlink:href');
-    return url ? { url, element: image } : null;
-  }, url => { activeUrl = url; }, '#workspace-container image');
+  if (started) return;
+  started = true;
+  trackSelection(resolveSlidesImage, url => { selectedUrl = url; }, WATCHED);
 }

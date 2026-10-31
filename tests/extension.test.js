@@ -177,9 +177,9 @@ test("Suite 5: Clipboard Failure UI Feedback (Toast & Button Error State)", asyn
     const copyBtn = doc.getElementById("imgloupe-action-copy");
     assert.ok(copyBtn, "Copy image button must exist in toolbar");
 
-    // Click button with active image
-    const clickPromise = copyBtn.onclick();
-    await clickPromise;
+    // Click button with active image; the toolbar handles the click.
+    copyBtn.click();
+    for (let i = 0; i < 50 && !writeCalled; i++) await new Promise(resolve => setTimeout(resolve, 10));
 
     assert.strictEqual(writeCalled, true, "Clipboard write must be triggered by button click");
   });

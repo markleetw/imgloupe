@@ -1,6 +1,6 @@
 {
   "name": "imgloupe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ImgLoupe previews, zooms, copies and downloads images in Google Docs, Sheets and Slides, with on-device English/Traditional Chinese OCR and whole-document ZIP export.",
   "scripts": {
     "build": "node scripts/build.mjs",
