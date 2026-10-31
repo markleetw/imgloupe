@@ -1,28 +1,58 @@
+# Builds, tests and publishes the store ZIP as a GitHub release.
+# Run it from the Actions tab ("Run workflow" on main): it tags the commit
+# v<manifest version>. Pushing a v* tag yourself works too.
 name: Release
 on:
+  workflow_dispatch:
   push:
     tags: ['v*']
 permissions:
-  contents: write
+  contents: read
+concurrency:
+  group: release
+  cancel-in-progress: false
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
+      - name: Release tag from manifest
+        id: version
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          tag="v$(node -p 'require("./manifest.json").version')"
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            [ "$GITHUB_REF_NAME" = "$tag" ] || { echo "::error::Tag $GITHUB_REF_NAME does not match manifest version $tag"; exit 1; }
+          else
+            [ "$GITHUB_REF_NAME" = main ] || { echo "::error::Run releases from main"; exit 1; }
+            if git ls-remote --exit-code --tags "https://github.com/$REPO" "refs/tags/$tag" >/dev/null; then
+              echo "::error::$tag already exists; bump the version in manifest.json and package.json first"; exit 1
+            fi
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - run: npm ci --ignore-scripts
-      - name: Verify tag matches manifest
-        run: node -e 'if (process.env.GITHUB_REF_NAME !== "v" + require("./manifest.json").version) process.exit(1)'
       - run: npm test
       - run: npm run check-syntax
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
       - run: node scripts/package.mjs && node scripts/verify-package.mjs
-      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+      - name: SHA-256 of the store ZIP
+        run: sha256sum "build/imgloupe-${{ steps.version.outputs.tag }}.zip" | tee "build/imgloupe-${{ steps.version.outputs.tag }}.zip.sha256"
+      - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          name: ImgLoupe ${{ github.ref_name }}
-          files: build/imgloupe-${{ github.ref_name }}.zip
+          tag_name: ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: ImgLoupe ${{ steps.version.outputs.tag }}
+          files: |
+            build/imgloupe-${{ steps.version.outputs.tag }}.zip
+            build/imgloupe-${{ steps.version.outputs.tag }}.zip.sha256
           generate_release_notes: true

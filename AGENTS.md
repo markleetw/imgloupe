@@ -146,3 +146,7 @@ fallback, and full/snippet OCR for all three application routes.
 Obtain third-party packages from official fixed sources with notices. Keep
 `PRIVACY.md` (English and Traditional Chinese) synchronized with actual behavior.
 Store publication and GitHub releases are separate actions from local changes.
+To release, bump the version in `manifest.json`, `package.json` and
+`package-lock.json`, merge to main, then run the Release workflow from the Actions
+tab. It tags `v<version>`, runs every test, and attaches the store ZIP and its
+SHA-256. Upload that exact ZIP to the Chrome Web Store.
