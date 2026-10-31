@@ -10,7 +10,6 @@ import { copyTextToClipboard } from "../shared/clipboard.js";
 import { fetchImageBlob } from "../shared/download-manager.js";
 import { getOcrDimensions } from "../../shared/ocr-limits.js";
 import { t, tn } from "../../shared/i18n.js";
-import { recordDevOcr } from "../dev-bridge.js";
 
 function cleanupCropButtonStates() {
   if (typeof document === "undefined") return;
@@ -84,9 +83,6 @@ export async function ocrImageToText(imgUrl) {
   }
 
   const text = cleanOcrText(response.text || "");
-  // Development builds only: lets the test bridge read the recognized text.
-  // eslint-disable-next-line no-undef
-  if (typeof __IMGLOUPE_DEV__ !== "undefined" && __IMGLOUPE_DEV__) recordDevOcr(response.text || "", text);
   if (!text) {
     uiToast(t("toastOcrNoText"), 3000);
     return false;

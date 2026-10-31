@@ -121,9 +121,11 @@ rebuilds generated `dist/` and icon `assets/` from source and fixed dependencies
 do not edit those outputs directly. The build may clear only those exact generated
 directories (and `dist.next/`) after validating they are direct children of this repo.
 `dist/` is not committed; `assets/` is, and CI fails if it differs from a fresh
-build. `npm run build:dev` adds a page-driven test bridge (src/content/dev-bridge.js)
-for driving a loaded unpacked build; `scripts/verify-package.mjs` rejects any
-publication ZIP that contains it.
+build. `npm run build:dev` builds from separate entries (`src/content/dev-entry.js`,
+`src/background/dev-entry.js`) that add a page-driven test bridge
+(src/content/dev-bridge.js) for driving a loaded unpacked build. Store sources
+contain no development branches; `scripts/verify-package.mjs` rejects any
+publication ZIP that contains the bridge or an `if (false)` block.
 
 For meaningful changes, run `npm test` (builds first), `npm run check-syntax`, and
 `npm run test:browser`. Local browser tests use installed Chrome; CI installs
