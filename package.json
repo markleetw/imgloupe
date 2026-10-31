@@ -32,6 +32,6 @@
     "jszip": "3.10.1",
     "tesseract.js": "5.1.1",
     "tesseract.js-core": "5.1.1",
-    "viewerjs": "1.11.6"
+    "viewerjs": "1.15.2"
   }
 }
